@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#9b7bd3">
+<title>Meu Mídia Kit | Lilás</title>
+<style>
+:root{
+ --lilac:#a78bd7;--deep:#70539f;--pale:#f3edfb;--pink:#eadcf5;
+ --ink:#40364c;--muted:#81768d;--paper:#fff;--line:#e9e1f1;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#f4f0f8;color:var(--ink);font-family:Inter,"Segoe UI",Arial,sans-serif}
+button,input,textarea,select{font:inherit}
+.topbar{position:sticky;top:0;z-index:5;background:#fffdfedc;backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:12px 4%;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-weight:800;letter-spacing:.04em;color:var(--deep)}.actions{display:flex;gap:8px;flex-wrap:wrap}
+.menu-wrap{position:relative}
+.menu-trigger{width:42px;height:42px;border:1px solid var(--line);border-radius:50%;background:#fff;color:var(--deep);font-size:23px;cursor:pointer;line-height:1}
+.menu-pop{display:none;position:absolute;right:0;top:50px;width:min(360px,calc(100vw - 30px));max-height:78vh;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 18px 55px #3c2a501f;z-index:10}
+.menu-pop.open{display:block}
+.menu-pop.settings-screen{position:fixed;inset:0;top:0;left:0;right:0;width:100%;height:100dvh;max-height:none;overflow:auto;border:0;border-radius:0;padding:0;background:#f7f3fb;box-shadow:none;z-index:30}
+.settings-screen .menu-head{position:sticky;top:0;background:#fff;padding:16px 5%;margin:0;border-bottom:1px solid var(--line);z-index:2}
+.settings-screen #settingsContent{max-width:760px;margin:22px auto;padding:0 18px 35px}
+.settings-screen #settingsPanel{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 8px 28px #5d47730b}
+.settings-screen .close-menu{width:auto;height:auto;padding:9px 14px;border-radius:999px;font-size:13px;font-weight:700}
+.package-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.package-card{background:#faf7fd;border:1px solid var(--line);border-radius:16px;padding:17px;min-width:0}
+.package-card h3{font:500 19px Georgia,serif;color:var(--deep);margin:0 0 8px}
+.package-card .price{font:500 24px Georgia,serif;color:var(--deep);margin:0 0 8px}
+.package-card p{font-size:12px;color:var(--muted);line-height:1.6;white-space:pre-line;margin:0}
+
+.menu-pop .panel{position:static;top:auto;border:0;box-shadow:none;padding:0}
+.menu-pop h2{margin-top:0}
+.menu-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.close-menu{border:0;background:var(--pale);color:var(--deep);border-radius:50%;width:30px;height:30px;font-size:18px;cursor:pointer}
+
+.btn{border:0;border-radius:999px;padding:10px 16px;background:var(--deep);color:white;font-weight:700;cursor:pointer}
+.btn.light{background:var(--pale);color:var(--deep);border:1px solid var(--line)}
+#settingsPanel{display:none}.menu-pop.open #settingsPanel{display:block}.layout{max-width:1180px;margin:28px auto;padding:0 18px;display:grid;grid-template-columns:290px minmax(0,1fr);gap:24px;align-items:start}
+.panel{background:white;border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 8px 28px #5d47730b;position:sticky;top:78px}
+.panel h2{font-size:17px;margin:0 0 5px}.hint{font-size:12px;color:var(--muted);line-height:1.5;margin:0 0 17px}
+label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin:12px 0 6px}
+input,textarea,select{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 11px;background:#fdfbff;color:var(--ink);outline:none}
+input:focus,textarea:focus,select:focus{border-color:var(--lilac);box-shadow:0 0 0 3px #a78bd722}
+input[type=color]{height:42px;padding:4px}
+input[type=file]{font-size:12px;padding:8px}
+hr{border:0;border-top:1px solid var(--line);margin:18px 0}
+.preview-wrap{min-width:0}
+.kit{max-width:790px;margin:0 auto;background:var(--paper);border-radius:28px;overflow:hidden;box-shadow:0 18px 60px #4a35641c}
+.hero{position:relative;min-height:275px;padding:42px 46px 35px;background:linear-gradient(130deg,var(--pale),var(--pink));display:grid;grid-template-columns:1fr 185px;gap:20px;align-items:center}
+.eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--deep);font-weight:800}
+h1{font-family:Georgia,serif;font-size:clamp(36px,6vw,57px);font-weight:500;line-height:1.02;margin:13px 0 10px;color:var(--deep)}
+.hero p{margin:0;color:#665a73;line-height:1.6;max-width:390px;font-size:14px}
+.photo{width:170px;height:190px;border-radius:90px 90px 24px 24px;object-fit:cover;background:#fff9;border:7px solid #ffffffa8;box-shadow:0 8px 24px #70539f22}
+.photo-placeholder{display:flex;align-items:center;justify-content:center;text-align:center;padding:15px;color:var(--deep);font-size:12px}
+.section{padding:30px 46px}
+.section-title{display:flex;align-items:center;gap:12px;margin-bottom:17px}
+.section-title h2{font:500 25px Georgia,serif;color:var(--deep);margin:0}
+.section-title:after{content:"";height:1px;background:var(--line);flex:1}
+.about{font-size:14px;line-height:1.8;color:#6d6378;margin:0}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.stat{background:#faf7fd;border:1px solid var(--line);border-radius:16px;padding:17px 12px;text-align:center}
+.stat strong{display:block;font:500 29px Georgia,serif;color:var(--deep)}
+.stat span{font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.tile{border:1px solid var(--line);border-radius:16px;padding:17px;background:#fff}
+.tile .symbol{font-size:20px;color:var(--lilac)}
+.tile h3{font:500 18px Georgia,serif;color:var(--deep);margin:8px 0 5px}
+.tile p{font-size:12px;color:var(--muted);line-height:1.6;margin:0}
+.audience{display:flex;gap:9px;flex-wrap:wrap}
+.pill{border-radius:999px;background:var(--pale);color:var(--deep);padding:9px 13px;font-size:12px}
+.contact{background:var(--deep);color:white;padding:28px 46px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.contact h2{font:500 25px Georgia,serif;margin:0 0 5px}.contact p{font-size:12px;color:#eee5f8;margin:0}
+.contact a{color:white;text-decoration:none;border:1px solid #ffffff88;border-radius:999px;padding:11px 16px;font-size:12px;white-space:nowrap}
+.footer{text-align:center;color:#a79bb4;font-size:10px;padding:13px}
+[contenteditable="true"]{outline:none;border-radius:4px}
+[contenteditable="true"]:focus{box-shadow:0 0 0 2px #a78bd755}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.panel{position:relative;top:auto}.hero{padding:30px 25px;grid-template-columns:1fr 125px;min-height:230px}.photo{width:120px;height:150px}.section{padding:25px}.contact{padding:25px;flex-direction:column;align-items:flex-start}}
+@media(max-width:480px){.topbar{align-items:flex-start;flex-direction:column}.hero{grid-template-columns:1fr 100px;padding:25px 18px}.photo{width:98px;height:130px}.section{padding:22px 18px}.contact{padding:23px 18px}.stats{gap:7px}.stat{padding:13px 5px}.stat strong{font-size:24px}.stat span{font-size:9px}.two-col{gap:9px}.tile{padding:13px}}
+@media print{
+ @page{size:A4;margin:0}
+ body{background:white;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ .topbar,.panel{display:none!important}.layout{display:block;margin:0;padding:0}.kit{max-width:none;border-radius:0;box-shadow:none;min-height:297mm}
+ .hero{min-height:75mm}.section{padding-top:10mm;padding-bottom:8mm}.contact{margin-top:5mm}
+}
+
+/* Ajustes extras de responsividade */
+html { -webkit-text-size-adjust: 100%; }
+body { min-width: 320px; overflow-x: hidden; }
+img { max-width: 100%; }
+.layout { width: 100%; }
+.preview-wrap { min-width: 0; width: 100%; }
+.kit { width: 100%; }
+.menu-pop { right: 0; }
+@media (max-width: 600px) {
+  .topbar { padding: 10px 14px; flex-direction: row; align-items: center; }
+  .brand { font-size: 13px; }
+  .actions { margin-left: auto; flex-wrap: nowrap; gap: 7px; }
+  .btn { padding: 9px 12px; font-size: 12px; }
+  .menu-trigger { width: 39px; height: 39px; }
+  .layout { display: block; margin: 12px auto; padding: 0 10px; }
+  .hero { grid-template-columns: minmax(0, 1fr) 92px; gap: 10px; padding: 24px 17px; min-height: 190px; }
+  .hero h1 { font-size: clamp(30px, 9vw, 43px); overflow-wrap: anywhere; }
+  .hero p { font-size: 12px; }
+  .photo { width: 90px; height: 118px; border-width: 4px; }
+  .section { padding: 21px 17px; }
+  .section-title h2 { font-size: 21px; }
+  .about { font-size: 13px; }
+  .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .stat { min-width: 0; padding: 12px 4px; }
+  .stat strong { font-size: clamp(19px, 6vw, 25px); overflow-wrap: anywhere; }
+  .stat span { font-size: 8px; letter-spacing: .02em; }
+  .two-col { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .tile { min-width: 0; padding: 12px; }
+  .tile h3 { font-size: 16px; }
+  .tile p { font-size: 11px; overflow-wrap: anywhere; }
+  .pill { font-size: 11px; padding: 8px 10px; }
+  .contact { padding: 22px 17px; gap: 13px; }
+  .contact h2 { font-size: 22px; }
+  .contact a { white-space: normal; }
+  .menu-pop { position: fixed; top: 62px; left: 10px; right: 10px; width: auto; max-height: calc(100dvh - 76px); }
+}
+@media (max-width: 600px) {
+  .package-grid { grid-template-columns: 1fr; }
+  .settings-screen #settingsContent { margin: 12px auto; padding: 0 12px 24px; }
+  .settings-screen #settingsPanel { padding: 17px; }
+}
+@media (max-width: 360px) {
+  .brand { font-size: 11px; }
+  .btn { padding: 8px 9px; font-size: 11px; }
+  .hero { grid-template-columns: minmax(0, 1fr) 78px; }
+  .photo { width: 77px; height: 105px; }
+  .section-title h2 { font-size: 19px; }
+  .two-col { grid-template-columns: 1fr; }
+}
+@media (min-width: 601px) and (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .panel { position: relative; top: auto; }
+  .kit { max-width: 760px; }
+}
+@media print {
+  body { min-width: 0; }
+  .menu-pop, .menu-trigger { display: none !important; }
+}
+
+</style>
+</head>
+<body>
+<header class="topbar">
+ <div class="brand">✿ MEU MÍDIA KIT</div>
+ <div class="actions">
+  <button class="btn" onclick="window.print()">Salvar PDF</button>
+  <div class="menu-wrap">
+   <button class="menu-trigger" id="menuTrigger" aria-label="Abrir configurações" title="Configurações">⋮</button>
+   <div class="menu-pop settings-screen" id="settingsMenu">
+    <div class="menu-head"><strong>⚙ Configurações do mídia kit</strong><button class="close-menu" id="closeMenu" aria-label="Fechar">Concluir e voltar ✕</button></div>
+    <div id="settingsContent"></div>
+   </div>
+  </div>
+ </div>
+</header>
+<main class="layout">
+ <aside class="panel" id="settingsPanel">
+  <h2>Personalize seu mídia kit</h2>
+  <p class="hint">Edite as informações aqui. O preview ao lado é atualizado automaticamente. Você também pode tocar nos textos do próprio mídia kit para editá-los.</p>
+  <label>Nome / nome de criador(a)</label><input id="name" value="Seu Nome">
+  <label>Frase de apresentação</label><input id="tagline" value="Criando conexões com autenticidade">
+  <label>Foto de perfil</label><input id="photoInput" type="file" accept="image/*">
+  <label>Sobre você</label><textarea id="aboutInput" rows="4">Sou criadora de conteúdo e compartilho ideias, experiências e inspirações de um jeito leve e verdadeiro. Meu objetivo é aproximar marcas e pessoas por meio de conteúdos criativos.</textarea>
+  <hr>
+  <h2>Estatísticas</h2>
+  <label>Seguidores</label><input id="followers" value="12,5 mil">
+  <label>Alcance mensal</label><input id="reach" value="85 mil">
+  <label>Engajamento</label><input id="engagement" value="6,8%">
+  <hr>
+  <h2>Conteúdo e público</h2>
+  <label>Seu nicho</label><input id="niche" value="Lifestyle • Beleza • Rotina">
+  <label>Faixa / perfil do público</label><input id="audience" value="Jovens e adultos • Brasil">
+  <label>Tipos de conteúdo (separe por vírgula)</label><textarea id="contentInput" rows="3">Reels e vídeos curtos, Stories, Fotos e carrosséis, UGC</textarea>
+  <hr>
+  <h2>Pacotes de parceria</h2>
+  <p class="hint">Configure até três opções de divulgação. Deixe o nome vazio para ocultar um pacote.</p>
+  <label>Pacote 1 — nome</label><input id="pkg1Name" value="Essencial">
+  <label>Pacote 1 — preço</label><input id="pkg1Price" value="R$ 80">
+  <label>Pacote 1 — o que inclui</label><textarea id="pkg1Desc" rows="2">1 sequência de Stories</textarea>
+  <label>Pacote 2 — nome</label><input id="pkg2Name" value="Destaque">
+  <label>Pacote 2 — preço</label><input id="pkg2Price" value="R$ 150">
+  <label>Pacote 2 — o que inclui</label><textarea id="pkg2Desc" rows="2">1 Reel + 3 Stories</textarea>
+  <label>Pacote 3 — nome</label><input id="pkg3Name" value="Completo">
+  <label>Pacote 3 — preço</label><input id="pkg3Price" value="R$ 250">
+  <label>Pacote 3 — o que inclui</label><textarea id="pkg3Desc" rows="2">1 Reel + 5 Stories + divulgação</textarea>
+  <hr>
+  <h2>Contato</h2>
+  <label>E-mail</label><input id="email" value="seuemail@email.com">
+  <label>Instagram / TikTok</label><input id="social" value="@seuperfil">
+  <label>Cor principal</label><input id="mainColor" type="color" value="#a78bd7">
+  <label>Cor clarinha</label><input id="paleColor" type="color" value="#f3edfb">
+  <p class="hint" style="margin-top:16px">Dica: use números reais e atualizados. Para enviar, clique em “Salvar / imprimir PDF” e escolha “Salvar como PDF”.</p>
+ </aside>
+ <section class="preview-wrap">
+  <article class="kit" id="kit">
+   <section class="hero">
+    <div>
+     <div class="eyebrow">MEDIA KIT · 2026</div>
+     <h1 id="vName" contenteditable="true">Seu Nome</h1>
+     <p id="vTagline" contenteditable="true">Criando conexões com autenticidade</p>
+    </div>
+    <div id="photoBox"><div class="photo photo-placeholder">Sua foto<br>fica aqui ♡</div></div>
+   </section>
+   <section class="section">
+    <div class="section-title"><h2>Um pouquinho sobre mim</h2></div>
+    <p class="about" id="vAbout" contenteditable="true">Sou criadora de conteúdo e compartilho ideias, experiências e inspirações de um jeito leve e verdadeiro. Meu objetivo é aproximar marcas e pessoas por meio de conteúdos criativos.</p>
+   </section>
+   <section class="section" style="padding-top:5px">
+    <div class="section-title"><h2>Minha comunidade</h2></div>
+    <div class="stats">
+     <div class="stat"><strong id="vFollowers" contenteditable="true">12,5 mil</strong><span>Seguidores</span></div>
+     <div class="stat"><strong id="vReach" contenteditable="true">85 mil</strong><span>Alcance mensal</span></div>
+     <div class="stat"><strong id="vEngagement" contenteditable="true">6,8%</strong><span>Engajamento</span></div>
+    </div>
+   </section>
+   <section class="section" style="padding-top:5px">
+    <div class="section-title"><h2>O que eu compartilho</h2></div>
+    <div class="two-col">
+     <div class="tile"><div class="symbol">♡</div><h3>Nicho</h3><p id="vNiche" contenteditable="true">Lifestyle • Beleza • Rotina</p></div>
+     <div class="tile"><div class="symbol">✧</div><h3>Meu público</h3><p id="vAudience" contenteditable="true">Jovens e adultos • Brasil</p></div>
+    </div>
+   </section>
+   <section class="section" style="padding-top:5px">
+    <div class="section-title"><h2>Possibilidades de parceria</h2></div>
+    <div class="audience" id="vContent">
+     <span class="pill">Reels e vídeos curtos</span><span class="pill">Stories</span><span class="pill">Fotos e carrosséis</span><span class="pill">UGC</span>
+    </div>
+   </section>
+   <section class="section" id="packagesSection" style="padding-top:5px">
+    <div class="section-title"><h2>Pacotes de parceria</h2></div>
+    <div class="package-grid" id="vPackages">
+     <div class="package-card"><h3>Essencial</h3><div class="price">R$ 80</div><p>1 sequência de Stories</p></div>
+     <div class="package-card"><h3>Destaque</h3><div class="price">R$ 150</div><p>1 Reel + 3 Stories</p></div>
+     <div class="package-card"><h3>Completo</h3><div class="price">R$ 250</div><p>1 Reel + 5 Stories + divulgação</p></div>
+    </div>
+   </section>
+   <section class="contact">
+    <div><h2>Vamos criar algo lindo?</h2><p id="vContact" contenteditable="true">seuemail@email.com · @seuperfil</p></div>
+    <a href="#" id="contactLink">Entre em contato ↗</a>
+   </section>
+   <div class="footer">Feito com carinho ✿ · Mídia Kit</div>
+  </article>
+ </section>
+</main>
+<script>
+const settingsPanel=document.getElementById('settingsPanel');
+document.getElementById('settingsContent').appendChild(settingsPanel);
+const settingsMenu=document.getElementById('settingsMenu');
+let settingsUnlocked = false;
+function openSettings(){
+ if(!settingsUnlocked){
+  const entered = window.prompt('Digite a senha para acessar as configurações:');
+  if(entered !== '0707'){
+   if(entered !== null) window.alert('Senha incorreta. Tente novamente.');
+   return;
+  }
+  settingsUnlocked = true;
+ }
+ settingsMenu.classList.add('open');
+ document.body.style.overflow='hidden';
+}
+function closeSettings(){
+ settingsMenu.classList.remove('open');
+ document.body.style.overflow='';
+}
+document.getElementById('menuTrigger').addEventListener('click',openSettings);
+document.getElementById('closeMenu').addEventListener('click',closeSettings);
+document.addEventListener('keydown',e=>{if(e.key==='Escape' && settingsMenu.classList.contains('open'))closeSettings();});
+const fields={
+ name:'vName',tagline:'vTagline',aboutInput:'vAbout',followers:'vFollowers',
+ reach:'vReach',engagement:'vEngagement',niche:'vNiche',audience:'vAudience'
+};
+Object.entries(fields).forEach(([input,target])=>{
+ const el=document.getElementById(input),out=document.getElementById(target);
+ el.addEventListener('input',()=>out.textContent=el.value);
+});
+function updatePackages(){
+ const wrap=document.getElementById('vPackages');
+ wrap.innerHTML='';
+ for(let i=1;i<=3;i++){
+  const name=document.getElementById('pkg'+i+'Name').value.trim();
+  const price=document.getElementById('pkg'+i+'Price').value.trim();
+  const desc=document.getElementById('pkg'+i+'Desc').value.trim();
+  if(!name) continue;
+  const card=document.createElement('div');card.className='package-card';
+  const title=document.createElement('h3');title.textContent=name;
+  const amount=document.createElement('div');amount.className='price';amount.textContent=price;
+  const details=document.createElement('p');details.textContent=desc;
+  card.append(title,amount,details);wrap.appendChild(card);
+ }
+ document.getElementById('packagesSection').style.display=wrap.children.length?'block':'none';
+}
+for(let i=1;i<=3;i++){
+ ['Name','Price','Desc'].forEach(part=>{
+  document.getElementById('pkg'+i+part).addEventListener('input',updatePackages);
+ });
+}
+function updateContact(){
+ const email=document.getElementById('email').value.trim();
+ const social=document.getElementById('social').value.trim();
+ document.getElementById('vContact').textContent=[email,social].filter(Boolean).join(' · ');
+ document.getElementById('contactLink').href=email?'mailto:'+email:'#';
+}
+['email','social'].forEach(id=>document.getElementById(id).addEventListener('input',updateContact));
+document.getElementById('contentInput').addEventListener('input',e=>{
+ const target=document.getElementById('vContent');target.innerHTML='';
+ e.target.value.split(',').map(x=>x.trim()).filter(Boolean).forEach(x=>{
+  const span=document.createElement('span');span.className='pill';span.textContent=x;target.appendChild(span);
+ });
+});
+document.getElementById('mainColor').addEventListener('input',e=>document.documentElement.style.setProperty('--lilac',e.target.value));
+document.getElementById('paleColor').addEventListener('input',e=>document.documentElement.style.setProperty('--pale',e.target.value));
+document.getElementById('photoInput').addEventListener('change',e=>{
+ const file=e.target.files[0];if(!file)return;
+ const reader=new FileReader();reader.onload=ev=>{
+  document.getElementById('photoBox').innerHTML='<img class="photo" alt="Foto de perfil" src="'+ev.target.result+'">';
+ };reader.readAsDataURL(file);
+});
+function resetKit(){if(confirm('Restaurar os textos de exemplo?'))location.reload()}
+updateContact();
+updatePackages();
+</script>
+</body>
+</html>
